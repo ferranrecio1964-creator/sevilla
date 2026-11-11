@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sevilla Cap d'Any | Ferran, Josep, Mònica & Juanamari</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #c2410c;
+      --primary-light: #ffedd5;
+      --primary-dark: #9a3412;
+      --dark: #0f172a;
+      --card-bg: #ffffff;
+      --bg: #f8fafc;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --maps-btn: #16a34a;
+      --wiki-btn: #0284c7;
+      --accent: #d97706;
+      --alert-bg: #fef3c7;
+      --alert-border: #f59e0b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg);
+      color: var(--dark);
+      line-height: 1.5;
+      padding-bottom: 60px;
+    }
+
+    /* HEADER AMB IMATGE DE FONS */
+    header {
+      position: relative;
+      background-image: 
+        linear-gradient(180deg, rgba(15, 23, 42, 0.45) 0%, rgba(154, 52, 18, 0.88) 100%),
+        url('https://images.unsplash.com/photo-1558642084-fd07fae5282e?auto=format&fit=crop&w=1200&q=80');
+      background-size: cover;
+      background-position: center 40%;
+      color: white;
+      text-align: center;
+      padding: 3.2rem 1rem 2rem;
+      border-bottom-left-radius: 32px;
+      border-bottom-right-radius: 32px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+    header h1 { 
+      font-size: 2.1rem; 
+      font-weight: 700; 
+      margin-bottom: 0.25rem;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+    header p.sub { 
+      font-size: 1.05rem; 
+      opacity: 0.95; 
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    }
+    .travelers {
+      display: inline-block;
+      margin-top: 0.8rem;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(8px);
+      padding: 0.4rem 1.1rem;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    /* SELECTOR D'ESCENARI CATEDRAL */
+    .scenario-toggle {
+      max-width: 680px;
+      margin: 1.25rem auto 0.5rem;
+      padding: 0.85rem 1.1rem;
+      background: var(--alert-bg);
+      border: 1px solid var(--alert-border);
+      border-radius: 14px;
+      font-size: 0.88rem;
+      color: #78350f;
+    }
+    .scenario-toggle strong { display: block; margin-bottom: 0.3rem; font-size: 0.92rem; }
+    .toggle-buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: 0.5rem;
+    }
+    .toggle-btn {
+      flex: 1;
+      padding: 0.5rem 0.6rem;
+      border: 1px solid #d97706;
+      border-radius: 8px;
+      background: white;
+      color: #78350f;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .toggle-btn.active {
+      background: #d97706;
+      color: white;
+    }
+
+    /* PESTANYES DIES */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 1rem auto 1rem;
+      max-width: 600px;
+      padding: 0 1rem;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 0.75rem 0.4rem;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      border-radius: 14px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+      text-align: center;
+    }
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(194, 65, 12, 0.3);
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    .day-content { display: none; }
+    .day-content.active { display: block; }
+    
+    /* ACORDIO DESPLEGABLE */
+    details {
+      background: var(--card-bg);
+      border-radius: 16px;
+      margin-bottom: 0.85rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    details[open] {
+      border-color: #cbd5e1;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+    }
+    summary {
+      list-style: none;
+      padding: 1.1rem 1.25rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    .summary-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      padding-right: 0.5rem;
+    }
+    .badge-wrap { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    .time-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--primary);
+      background: var(--primary-light);
+      padding: 0.15rem 0.55rem;
+      border-radius: 6px;
+    }
+    .price-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #065f46;
+      background: #d1fae5;
+      padding: 0.15rem 0.5rem;
+      border-radius: 6px;
+    }
+    .place-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--dark);
+    }
+    .chevron {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      transition: transform 0.2s ease;
+      min-width: 20px;
+      text-align: right;
+    }
+    details[open] .chevron {
+      transform: rotate(180deg);
+    }
+    .content-body {
+      padding: 0 1.25rem 1.25rem;
+      border-top: 1px solid #f1f5f9;
+      color: #334155;
+      font-size: 0.95rem;
+    }
+    .content-body p { margin-top: 0.75rem; }
+    .tips-box {
+      margin-top: 0.75rem;
+      padding: 0.6rem 0.85rem;
+      background: #f8fafc;
+      border-left: 3px solid var(--accent);
+      border-radius: 4px;
+      font-size: 0.85rem;
+      color: #475569;
+    }
+    .btn-group {
+      display: flex;
+      gap: 8px;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      color: white;
+      transition: opacity 0.2s;
+    }
+    .action-btn:hover { opacity: 0.9; }
+    .btn-maps { background-color: var(--maps-btn); }
+    .btn-wiki { background-color: var(--wiki-btn); }
+    
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Sevilla Cap d'Any</h1>
+    <p class="sub">31 Desembre 2026 – 2 Gener 2027</p>
+    <div class="travelers">👥 Ferran · Josep · Mònica · Juanamari</div>
+  </header>
+
+  <!-- CONTROL DINÀMIC DEL DUBTE DE LA CATEDRAL -->
+  <div class="container">
+    <div class="scenario-toggle">
+      <strong>⚠️ Estat horaris Catedral + Giralda (13 €/persona):</strong>
+      Pendent de confirmació per al 2 de gener. Tria la vista segons s'acabi quadrant:
+      <div class="toggle-buttons">
+        <button id="btn-scen-a" class="toggle-btn active" onclick="setScenario('A')">Opció A: Free Tour 31/12 + Catedral 02/01</button>
+        <button id="btn-scen-b" class="toggle-btn" onclick="setScenario('B')">Opció B: Catedral 31/12 (sense Free Tour)</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showDay('dia1')">31 Des<br><small>Arribada & Cap d'Any</small></button>
+    <button class="tab-btn" onclick="showDay('dia2')">1 Gen<br><small>Any Nou & Triana</small></button>
+    <button class="tab-btn" onclick="showDay('dia3')">2 Gen<br><small>Final 18:00 h</small></button>
+  </div>
+
+  <div class="container">
+    <!-- DIA 1: 31 DE DESEMBRE -->
+    <div id="dia1" class="day-content active">
+
+      <!-- BLOC VARIABLE: SI OPCIÓ B (CATEDRAL DIA 31) -->
+      <div class="scenario-b-only" style="display: none;">
+        <details open>
+          <summary>
+            <div class="summary-left">
+              <div class="badge-wrap">
+                <span class="time-badge">13:00 – 14:45</span>
+                <span class="price-badge">13 € / pers.</span>
+              </div>
+              <span class="place-title">Catedral de Sevilla & Giralda</span>
+            </div>
+            <span class="chevron">▼</span>
+          </summary>
+          <div class="content-body">
+            <p>Visita a la catedral gòtica més gran del món, sepulcre de Cristòfor Colom, Pati dels Tarongers i pujada per les rampes de la Giralda. (Substitueix el Free Tour si el dia 2 no obre).</p>
+            <div class="btn-group">
+              <a href="https://www.google.com/maps/search/?api=1&query=Catedral+de+Sevilla" target="_blank" class="action-btn btn-maps">📍 Google Maps</a>
+              <a href="https://ca.wikipedia.org/wiki/Catedral_de_Sevilla" target="_blank" class="action-btn btn-wiki">📖 Viquipèdia</a>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- BLOC VARIABLE: SI OPCIÓ A (ARRIVADA AMB TAPES) -->
+      <div class="scenario-a-only">
+        <details open>
+          <summary>
+            <div class="summary-left">
+              <div class="badge-wrap">
+                <span class="time-badge">13:00 – 14:45</span>
+              </div>
+              <span class="place-title">Arribada, Deixar Maletes & Primeres Tapes</span>
+            </div>
+            <span class="chevron">▼</span>
+          </summary>
+          <div class="content-body">
+            <p>Arribada al migdia, registre ràpid a l'allotjament i dinar informal de benvinguda a prop del centre històric abans d'iniciar el tour.</p>
+            <div class="tips-box">💡 Recomanació ràpida de tapes: Bodeguita Romero o Blanco Cerrillo.</div>
+            <div class="btn-group">
+              <a href="https://www.google.com/maps/search/?api=1&query=Barrio+del+Arenal+Sevilla" target="_blank" class="action-btn btn-maps">📍 Google Maps</a>
+              <a href="https://es.wikipedia.org/wiki/El_Arenal_(Sevilla)" target="_blank" class="action-btn btn-wiki">📖 Viquipèdia</a>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- BLOC VARIABLE: FREE TOUR (NOMÉS OPCIÓ A) -->
+      <div class="scenario-a-only">
+        <details open>
+          <summary>
+            <div class="summary-left">
+              <div class="badge-wrap">
+                <span class="time-badge">15:00 – 17:00</span>
+                <span class="price-badge">Reserva prèvia</span>
+              </div>
+              <span class="place-title">Free Tour per Sevilla (2 hores)</span>
+            </div>
+            <span class="chevron">▼</span>
+          </summary>
+          <div class="content-body">
+            <p>Recorregut guiat a peu pel centre monumental i el Barri de Santa Cruz, contextualitzant la història, palaus, llegendes de la ciutat i punts clau.</p>
+            <div class="tips-box">⚠️ Reservat amb antelació: cancel·lable sense cost si finalment es fa la Catedral el dia 31.</div>
+            <div class="btn-group">
+              <a href="https://www.google.com/maps/search/?api=1&query=Plaza+del+Triunfo+Sevilla" target="_blank" class="action-btn btn-maps">📍 Google Maps (Punt habitual de trobada)</a>
+              <a href="https://ca.wikipedia.org/wiki/Sevilla" target="_blank" class="action-btn btn-wiki">📖 Viquipèdia</a>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- SI OPCIÓ B: PASSEIG LLIURE PER SANTA CRUZ -->
+      <div class="scenario-b-only" style="display: none;">
+        <details>
+          <summary>
+            <div class="summary-left">
+              <div class="badge-wrap">
+                <span class="time-badge">15:00 – 17:00</span>
+              </div>
+              <span class="place-title">Dinar de Tapes & Barri de Santa Cruz</span>
+            </div>
+            <span class="chevron">▼</span>
+          </summary>
+          <div class="content-body">
+            <p>Dinar relaxat després de la Catedral i passeig pel laberint de la jueria: Callejón del Agua, Plaza de Doña Elvira i Pati de Banderes.</p>
+            <div class="btn-group">
+              <a href="https://www.google.com/maps/search/?api=1&query=Barrio+de+Santa+Cruz+Sevilla" target="_blank" class="action-btn btn-maps">📍 Google Maps</a>
+              <a href="https://ca.wikipedia.org/wiki/Santa_Cruz_(Sevilla)" target="_blank" class="action-btn btn-wiki">📖 Viquipèdia</a>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <details>
+        <summary>
+          <div class="summary-left">
+            <div class="badge-wrap">
+              <span class="time-badge">17:30 – 19:30</span>
+            </div>
+            <span class="place-title">Ambient de "Tardevieja" a la Plaza del Salvador</span>
+          </div>
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="content-body">
+          <p>La gran tradició sevillana de comiat d'any: ambient festiu a les terrasses del Salvador, cervesa freda i passeig pels carrers il·luminats de Sierpes i Tetuán.</p>
+          <div class="btn-group">
+            <a href="https://www.google.com/maps/search/?api=1&query=Plaza+del+Salvador+Sevilla" target="_blank" class="action-btn btn-maps">📍 Google Maps</a>
+            <a href="https://es.wikipedia.org/wiki/Plaza_del_Salvador_(Sevilla)" target="_blank" class="action-btn btn-wiki">📖 Viquipèdia</a>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <div class="summary-left">
+            <div class="badge-wrap">
+              <span class="time-badge">21:30 – 23:30</span>
+            </div>
+            <span class="place-title">Sopar Especial de Cap d'Any</span>
+          </div>
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="content-body">
+          <p>Sopar de gala o menú especial per als quatre en restaurant del centre històric.</p>
+          <div class="tips-box">⚠️ Molt important: Confirmar reserva tancada del menú de Cap d'Any.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <div class="summary-left">
+            <div class="badge-wrap">
+              <span class="time-badge">23:45 – 01:30</span>
+            </div>
+            <span class="place-title">Campanades a la Plaza Nueva</span>
+          </div>
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="content-body">
+          <p>Punt neuràlgic de Sevilla davant la façana de l'Ajuntament per menjar els 12 grans de raïm, brindar i celebrar l'entrada al 2027.</p>
+          <div class="btn-group">
+            <a href="https://www.google.com/maps/search/?api=1&query=Plaza+Nueva+Sevilla" target="_blank" class="action-btn btn-maps">📍 Google Maps</a>
+            <a href="https://es.wikipedia.org/wiki/Plaza_Nueva_(Sevilla)" target="_blank" class="action-btn btn-wiki">📖 Viquipèdia</a>
+          </div>
+        </div>
+      </details>
+
+    </div>
+
+    <!-- DIA 2: 1 DE GENER -->
+    <div id="dia2" class="day-content">
+
+      <details open>
+        <summary>
+          <div class="summary-left">
+            <div class="badge-wrap">
+              <span class="time-badge">10:30 – 12:30</span>
+            </div>
+            <span class="place-title">Plaza de España & Parc de María Luisa</span>
+          </div>
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="content-body">
+          <p>Passeig monumental d'Any Nou pel conjunt de l'Exposició Iberoamericana de 1929 d'Aníbal González, els bancs de ceràmica de les províncies i els jardins del parc.</p>
+          <div class="btn-group">
+            <a href="https://www.google.com/maps/search/?api=1&query=Plaza+de+Espana+Sevilla" target="_blank" class="action-btn btn-maps">📍 Google Maps</a>
+            <a href="https://ca.wikipedia.org/wiki/Pla%C3%A7a_d%27Espanya_(Sevilla)" target="_blank" class="action-btn btn-wiki">📖 Viquipèdia</a>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <div class="summary-left">
+            <div class="badge-wrap">
+              <span class="time-badge">12:30 – 14:00</span>
+            </div>
+            <span class="place-title">Torre del Oro & Passeig Marqués de Contadero</span>
+          </div>
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="content-body">
+          <p>Caminada al costat del Guadalquivir fins a l'antiga torre defensiva almohade del segle XIII.</p>
+          <div class="btn-group">
+            <a href="https://www.google.com/maps/search/?api=1&query=Torre+del+Oro+Sevilla" target="_blank" class="action-btn btn-maps">📍 Google Maps</a>
+            <a href="https://ca.wikipedia.org/wiki/Torre_del_Oro" target="_blank" class="action-btn btn-wiki">📖 Viquipèdia</a>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <div class="summary-left">
+            <div class="badge-wrap">
+              <span class="time-badge">14:00 – 16:30</span>
+            </div>
+            <span class="place-title">Pont d'Isabel II & Barri de Triana</span>
+          </div>
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="content-body">
+          <p>Creuament pel pont de Triana, vistes fluvials des del carrer Betis i dinar de tapes d'Any Nou al carrer San Jacinto.</p>
+          <div class="btn-group">
+            <a href="https://www.google.com/maps/search/?api=1&query=Puente+de+Isabel+II+Sevilla" target="_blank" class="action-btn btn-maps">📍 Google Maps</a>
+            <a href="https://ca.wikipedia.org/wiki/Pont_d%27Isabel_II" target="_blank" class="action-btn btn-wiki">📖 Viquipèdia</a>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <div class="summary-left">
+            <div class="badge-wrap">
+              <span class="time-badge">17:00 – 18:30</span>
+            </div>
+            <span class="place-title">Passeig en Vaixell pel Guadalquivir</span>
+          </div>
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="content-body">
+          <p>Creuer fluvial d'1 hora sortint de la vora de la Torre del Oro per veure el capvespre i la ciutat il·luminada des de l'aigua.</p>
+          <div class="btn-group">
+            <a href="https://www.google.com/maps/search/?api=1&query=Muelle+del+Marques+de+Contadero+Sevilla" target="_blank" class="action-btn btn-maps">📍 Google Maps</a>
+            <a href="https://ca.wikipedia.org/wiki/Guadalquivir" target="_blank" class="action-btn btn-wiki">📖 Viquipèdia</a>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <div class="summary-left">
+            <div class="badge-wrap">
+              <span class="time-badge">19:00 – 21:00</span>
+            </div>
+            <span class="place-title">Las Setas de Sevilla (Metropol Parasol)</span>
+          </div>
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="content-body">
+          <p>Pujada a la passarel·la mirador de l'estructura de fusta a la Plaza de la Encarnación per gaudir de la panoràmica nocturna de 360°.</p>
+          <div class="btn-group">
+            <a href="https://www.google.com/maps/search/?api=1&query=Metropol+Parasol+Sevilla" target="_blank" class="action-btn btn-maps">📍 Google Maps</a>
+            <a href="https://ca.wikipedia.org/wiki/Metropol_Parasol" target="_blank" class="action-btn btn-wiki">📖 Viquipèdia</a>
+          </div>
+        </div>
+      </details>
+
+    </div>
+
+    <!-- DIA 3: 2 DE GENER (FINAL 18:00 H) -->
+    <div id="dia3" class="day-content">
+
+      <details open>
+        <summary>
+          <div class="summary-left">
+            <div class="badge-wrap">
+              <span class="time-badge">09:00 – 11:30</span>
+              <span class="price-badge">Comprar ja</span>
+            </div>
+            <span class="place-title">Reial Alcàsser de Sevilla</span>
+          </div>
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="content-body">
+          <p>Visita al Palau Reial habitat més antic d'Europa: Palau de Pedro I, Pati de les Donzelles, Banys de Doña María de Padilla i els seus jardins.</p>
+          <div class="tips-box">🎟️ Accés al primer torn de les 09:00 h per aprofitar sense aglomeracions.</div>
+          <div class="btn-group">
+            <a href="https://www.google.com/maps/search/?api=1&query=Real+Alcazar+de+Sevilla" target="_blank" class="action-btn btn-maps">📍 Google Maps</a>
+            <a href="https://ca.wikipedia.org/wiki/Reials_Alc%C3%A0ssers_de_Sevilla" target="_blank" class="action-btn btn-wiki">📖 Viquipèdia</a>
+          </div>
+        </div>
+      </details>
+
+      <!-- CATEDRAL DIA 2 SI OPCIÓ A -->
+      <div class="scenario-a-only">
+        <details open>
+          <summary>
+            <div class="summary-left">
+              <div class="badge-wrap">
+                <span class="time-badge">11:45 – 13:45</span>
+                <span class="price-badge">13 € / pers.</span>
+              </div>
+              <span class="place-title">Catedral de Sevilla & Pujada a La Giralda</span>
+            </div>
+            <span class="chevron">▼</span>
+          </summary>
+          <div class="content-body">
+            <p>Visita a l'interior del temple catedralici, tomba de Colom, Pati dels Tarongers i ascens per les 35 rampes de la Giralda.</p>
+            <div class="tips-box">📌 Horaris del 2 de gener pendents de confirmació oficial.</div>
+            <div class="btn-group">
+              <a href="https://www.google.com/maps/search/?api=1&query=Catedral+de+Sevilla" target="_blank" class="action-btn btn-maps">📍 Google Maps</a>
+              <a href="https://ca.wikipedia.org/wiki/Catedral_de_Sevilla" target="_blank" class="action-btn btn-wiki">📖 Viquipèdia</a>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <!-- VISITA ALTERNATIVA DIA 2 SI CATEDRAL JA S'HA FET EL DIA 31 (OPCIÓ B) -->
+      <div class="scenario-b-only" style="display: none;">
+        <details open>
+          <summary>
+            <div class="summary-left">
+              <div class="badge-wrap">
+                <span class="time-badge">11:45 – 13:45</span>
+              </div>
+              <span class="place-title">Casa de Pilatos & Barri de l'Alfalfa</span>
+            </div>
+            <span class="chevron">▼</span>
+          </summary>
+          <div class="content-body">
+            <p>Com que la Catedral s'hauria visitat el dia 31, visita a la Casa de Pilatos, el palau renaixentista-mudèjar més impressionant de Sevilla, seguit d'un vermut a la Plaza de la Alfalfa.</p>
+            <div class="btn-group">
+              <a href="https://www.google.com/maps/search/?api=1&query=Casa+de+Pilatos+Sevilla" target="_blank" class="action-btn btn-maps">📍 Google Maps</a>
+              <a href="https://ca.wikipedia.org/wiki/Casa_de_Pilatos" target="_blank" class="action-btn btn-wiki">📖 Viquipèdia</a>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <details>
+        <summary>
+          <div class="summary-left">
+            <div class="badge-wrap">
+              <span class="time-badge">14:00 – 16:00</span>
+            </div>
+            <span class="place-title">Dinar de Comiat de Viatge</span>
+          </div>
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="content-body">
+          <p>Últim dinar relaxat de tapes pel centre històric (carrer Mateos Gago o Casa Morales): salmorejo, cazón en adobo, espinacas con garbanzos i pernil ibèric.</p>
+          <div class="btn-group">
+            <a href="https://www.google.com/maps/search/?api=1&query=Calle+Mateos+Gago+Sevilla" target="_blank" class="action-btn btn-maps">📍 Google Maps</a>
+            <a href="https://es.wikipedia.org/wiki/Calle_Mateos_Gago" target="_blank" class="action-btn btn-wiki">📖 Viquipèdia</a>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <div class="summary-left">
+            <div class="badge-wrap">
+              <span class="time-badge">16:00 – 17:15</span>
+            </div>
+            <span class="place-title">Plaza del Cabildo & Últimes Compres</span>
+          </div>
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="content-body">
+          <p>Passeig per la porxada semicircular de la Plaza del Cabildo, compres de dolços de convent o regals, i cafè de sobretaula.</p>
+          <div class="btn-group">
+            <a href="https://www.google.com/maps/search/?api=1&query=Plaza+del+Cabildo+Sevilla" target="_blank" class="action-btn btn-maps">📍 Google Maps</a>
+            <a href="https://es.wikipedia.org/wiki/Plaza_del_Cabildo_(Sevilla)" target="_blank" class="action-btn btn-wiki">📖 Viquipèdia</a>
+          </div>
+        </div>
+      </details>
+
+      <details>
+        <summary>
+          <div class="summary-left">
+            <div class="badge-wrap">
+              <span class="time-badge">17:15 – 18:00</span>
+            </div>
+            <span class="place-title">Recollida d'Equipatge & Final de la Ruta</span>
+          </div>
+          <span class="chevron">▼</span>
+        </summary>
+        <div class="content-body">
+          <p>Pas per l'allotjament per agafar maletes i tancament de l'itinerari a les 18:00 h per enfilar camí d'estació o aeroport.</p>
+        </div>
+      </details>
+
+    </div>
+
+    <footer>
+      Planificador Sevilla · 31 Des 2026 – 2 Gen 2027 · Ferran, Josep, Mònica i Juanamari
+    </footer>
+  </div>
+
+  <script>
+    function showDay(dayId) {
+      document.querySelectorAll('.day-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      
+      document.getElementById(dayId).classList.add('active');
+      event.currentTarget.classList.add('active');
+    }
+
+    function setScenario(type) {
+      const isA = (type === 'A');
+      document.getElementById('btn-scen-a').classList.toggle('active', isA);
+      document.getElementById('btn-scen-b').classList.toggle('active', !isA);
+
+      document.querySelectorAll('.scenario-a-only').forEach(el => {
+        el.style.display = isA ? 'block' : 'none';
+      });
+      document.querySelectorAll('.scenario-b-only').forEach(el => {
+        el.style.display = isA ? 'none' : 'block';
+      });
+    }
+  </script>
+</body>
+</html>
